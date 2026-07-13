@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aira-group/aira-cli-kit/main/schema/aira.config.schema.json",
+  "name": "codebuddy",
+  "displayName": "CodeBuddy",
+  "description": "A chat-based coding assistant that can read and edit files in your project, with your permission on every change.",
+  "version": "0.1.0",
+  "provider": "custom",
+  "api": "https://api.example.com/v1/chat",
+  "auth": {
+    "type": "bearer",
+    "envVar": "CODEBUDDY_API_KEY"
+  },
+  "commands": [
+    {
+      "name": "chat",
+      "description": "Chat with CodeBuddy — it can read, write, and edit files with your permission",
+      "method": "POST",
+      "interactive": true,
+      "requestTemplate": { "message": "{{input}}" },
+      "responsePath": "reply",
+      "renderMarkdown": true,
+      "tools": ["read_file", "write_file", "edit_file", "list_files"]
+    }
+  ],
+  "plugins": [],
+  "theme": {
+    "primaryColor": "#7C5CFF",
+    "gradient": ["#7C5CFF", "#00D4FF"],
+    "logo": "gradient"
+  }
+}

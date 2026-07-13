@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aira-group/aira-cli-kit/main/schema/aira.config.schema.json",
+  "name": "openhands",
+  "displayName": "OpenHands",
+  "description": "AI coding assistant CLI, powered by OpenHands.",
+  "version": "0.1.0",
+  "provider": "custom",
+  "api": "https://example.com/chat",
+  "auth": {
+    "type": "bearer",
+    "envVar": "OPENHANDS_API_KEY"
+  },
+  "commands": [
+    {
+      "name": "chat",
+      "description": "Chat interactively with OpenHands",
+      "method": "POST",
+      "interactive": true,
+      "requestTemplate": { "message": "{{input}}" },
+      "responsePath": "reply",
+      "renderMarkdown": true
+    },
+    {
+      "name": "code",
+      "description": "Generate code from a natural language prompt",
+      "method": "POST",
+      "endpoint": "/code",
+      "requestTemplate": { "prompt": "{{input}}" },
+      "responsePath": "code",
+      "renderMarkdown": true
+    },
+    {
+      "name": "explain",
+      "description": "Explain a piece of code or a concept",
+      "method": "POST",
+      "endpoint": "/explain",
+      "requestTemplate": { "text": "{{input}}" },
+      "responsePath": "explanation",
+      "renderMarkdown": true
+    },
+    {
+      "name": "summarize",
+      "description": "Summarize a file, diff, or block of text",
+      "method": "POST",
+      "endpoint": "/summarize",
+      "requestTemplate": { "text": "{{input}}" },
+      "responsePath": "summary"
+    }
+  ],
+  "plugins": [],
+  "theme": {
+    "primaryColor": "#00D4FF",
+    "gradient": ["#00D4FF", "#7C5CFF"],
+    "logo": "gradient"
+  }
+}

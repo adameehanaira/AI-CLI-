@@ -1,0 +1,25 @@
+{
+  "name": "@aira/runtime",
+  "version": "0.1.0",
+  "description": "Shared runtime used by CLIs generated with Aira CLI Kit — handles API calls, auth, chat REPL and themed output.",
+  "license": "MIT",
+  "author": "Aira Group Of Technology <support@airaai.work.gd>",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "chalk": "^5.3.0",
+    "conf": "^13.0.1",
+    "gradient-string": "^2.0.2",
+    "figlet": "^1.7.0",
+    "inquirer": "^10.2.2",
+    "marked": "^14.1.2",
+    "marked-terminal": "^7.1.0",
+    "ora": "^8.1.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}
