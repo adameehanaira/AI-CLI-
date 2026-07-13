@@ -144,20 +144,47 @@ A `chat` command can be given permission to read, list, write, or edit files in 
 }
 ```
 
-Your API signals a file action by including a fenced block in its reply:
+Your API signals a file action by including a fenced JSON block in its Markdown response:
 
 ````
 ```agent-action
-{ "type": "write_file", "path": "hello.py", "content": "print('hi')" }
+{
+  "type": "write_file",
+  "path": "hello.py",
+  "content": "print('hi')"
+}
 ```
 ````
 
-**Safety rules, enforced by Aira itself — not optional, not configurable away:**
+### Supported Tools & Payload Formats
 
-- Every path is resolved against the current project folder. Anything that resolves outside it (`../../etc/passwd`, absolute paths elsewhere) is refused before the filesystem is ever touched.
-- `write_file` and `edit_file` always show a preview (or a diff-style `-`/`+` view for edits) and require a typed **y/n confirmation** from the user. There is no auto-approve flag.
-- `read_file` and `list_files` don't need confirmation but are echoed to the terminal so the user sees exactly what was accessed.
-- A tool only works if it's explicitly listed in that command's `tools` array — nothing is available by default.
+Aira CLI Kit runtime supports the following tools when listed under `tools`:
+
+1. **`list_files`**  
+   Lists all entries inside a directory.  
+   * **Request payload**: `{ "type": "list_files", "path": "dir_name" }`  
+   * **Result**: Echoes 📂 list action and returns a list of file/directory names.
+
+2. **`read_file`**  
+   Reads the entire text content of a file.  
+   * **Request payload**: `{ "type": "read_file", "path": "path/to/file.txt" }`  
+   * **Result**: Echoes 📖 read action and returns the raw file content.
+
+3. **`write_file`**  
+   Creates a new file or overwrites an existing file.  
+   * **Request payload**: `{ "type": "write_file", "path": "path/to/file.txt", "content": "file content here" }`  
+   * **Result**: Displays an 800-character preview, asks for user confirmation (**y/n**), and writes to disk on approval.
+
+4. **`edit_file`**  
+   Replaces a specific block of text inside a file (search and replace).  
+   * **Request payload**: `{ "type": "edit_file", "path": "path/to/file.txt", "find": "old code block", "replace": "new code block" }`  
+   * **Result**: Shows a diff-style preview (`-` old / `+` new up to 200 characters), asks for user confirmation (**y/n**), and edits on approval.
+
+### Safety Rules (Enforced by Aira)
+
+* **Path containment**: Every path is strictly resolved against the current directory (`process.cwd()`). Attempts to reference paths outside this directory (using `..` or absolute paths) will fail with an error.
+* **Explicit confirmation**: Any write or edit operation always requires a typed confirmation (`y/n`) from the user. There is no auto-approve mode.
+* **User transparency**: Read and list operations do not block for confirmation, but they are clearly logged to the terminal so the user knows exactly what the agent accessed.
 
 See [`examples/coding-agent/aira.config.json`](./examples/coding-agent/aira.config.json) for a full working example.
 
